@@ -20,6 +20,9 @@ def test_generate_sql_query():
     query = SomeTable.query(SomeTable.id == 3)
     assert query == 'SELECT * FROM "some_table" WHERE id = 3;'
 
+    query = SomeTable.query(SomeTable.id.eq(5))
+    assert query == 'SELECT * FROM "some_table" WHERE id = 5;'
+
     query = SomeTable.query(SomeTable.id == 3, SomeTable.id == 5)
     assert query == 'SELECT * FROM "some_table" WHERE id = 3 AND id = 5;'
 
@@ -34,6 +37,12 @@ def test_generate_sql_query():
 
     query = SomeTable.query(SomeTable.id < 3, SomeTable.id > 0)
     assert query == 'SELECT * FROM "some_table" WHERE id < 3 AND id > 0;'
+
+    query = SomeTable.query(SomeTable.id > 0, SomeTable.id < 100, SomeTable.rating.gt(50))
+    assert query == 'SELECT * FROM "some_table" WHERE id > 0 AND id < 100 AND rating > 50;'
+
+    query = SomeTable.query(SomeTable.rating.gt(25))
+    assert query == 'SELECT * FROM "some_table" WHERE rating > 25;'
 
     query = SomeTable.query(SomeTable.date > date(2016, 1, 1))
     assert query == 'SELECT * FROM "some_table" WHERE date > "2016-01-01";'
