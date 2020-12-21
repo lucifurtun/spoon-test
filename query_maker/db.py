@@ -125,14 +125,14 @@ class DateColumn(Column):
 
 class Table:
     @classmethod
-    def query(cls, *filters) -> str:
-        final_query = cls.generate_query(*filters)
+    def generate_sql_query(cls, *filters) -> str:
+        final_query = cls._compose_sql_query(*filters)
         final_query += ';'
 
         return final_query
 
     @classmethod
-    def generate_query(cls, *filters) -> str:
+    def _compose_sql_query(cls, *filters) -> str:
         table_name = cls.Meta.table_name if hasattr(cls, 'Meta') else cls.__name__
 
         # Assume that we always select *.
